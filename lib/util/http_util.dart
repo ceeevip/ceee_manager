@@ -1,3 +1,4 @@
+import 'package:ceee_manager/model/AuthModel.dart';
 import 'package:ceee_manager/model/SourceModel.dart';
 import 'package:ceee_manager/model/mymodels.dart';
 import 'package:dio/dio.dart';
@@ -33,6 +34,19 @@ class HttpDio {
       var jsStr = await dio.get("/auth/list_source");
       for(var source in jsStr.data){
         rs.add(SourceModel.fromJson(source));
+      }
+      return rs;
+    } on DioError catch (e) {
+      print(e);
+    }
+  }
+
+  static Future<List<AuthModel>?> auths_list() async{
+    try {
+      List<AuthModel> rs = [];
+      var jsStr = await dio.get("/auth/list_auths");
+      for(var source in jsStr.data){
+        rs.add(AuthModel.fromJson(source));
       }
       return rs;
     } on DioError catch (e) {
