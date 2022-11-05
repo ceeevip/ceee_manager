@@ -1,4 +1,7 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import '../generated/l10n.dart';
+import '../util/demoLocalizations.dart';
 
 class FirstPage extends StatefulWidget {
   const FirstPage({Key? key}) : super(key: key);
@@ -10,6 +13,13 @@ class FirstPage extends StatefulWidget {
 class _FirstPageState extends State<FirstPage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(S.of(context).title),
+      ),
+      body: Center(
+        child: Text("xxxx"),
+      ),
+    );
   }
 }

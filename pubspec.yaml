@@ -29,6 +29,8 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  flutter_localizations:
+    sdk: flutter
   flutter:
     sdk: flutter
 
@@ -39,6 +41,9 @@ dependencies:
   shared_preferences: ^2.0.15
   dio: ^4.0.6
   toast: ^0.3.0
+  intl: ^0.17.0
+  intl_generator: ^0.3.0
+
 
 dev_dependencies:
   flutter_test:
@@ -92,3 +97,5 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+flutter_intl:
+  enabled: true

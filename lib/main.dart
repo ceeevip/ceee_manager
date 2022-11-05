@@ -4,8 +4,12 @@ import 'package:ceee_manager/page/first_page.dart';
 import 'package:ceee_manager/page/login_regist_page.dart';
 import 'package:ceee_manager/page/manager_page.dart';
 import 'package:ceee_manager/util/data_store.dart';
+import 'package:ceee_manager/util/demoLocalizations.dart';
 import 'package:ceee_manager/util/http_util.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
+import 'generated/l10n.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +27,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Ceee管理',
       debugShowCheckedModeBanner: false,
+      supportedLocales: S.delegate.supportedLocales,
+      localizationsDelegates: const [
+        // ... app-specific localization delegate[s] here
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate
+      ],
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -43,22 +55,23 @@ class _MainAppWidgetState extends State<MainAppWidget> {
   final PageController _pageController = PageController();
   late List<BottomNavigationBarItem> _items;
   late List<Widget> _pages;
-  var isLoginSuccess =false;
+  var isLoginSuccess = false;
 
   @override
   void initState() {
     super.initState();
     setState(() {
-      isLoginSuccess = SpUtil.getString(StoreKey.ACCESS_TOKEN.name)!='';
-      if(isLoginSuccess){
-        HttpDio.initOptions(SpUtil.getString(StoreKey.BASE_URL.name)!,
-            {"Authorization":"${SpUtil.getString(StoreKey.TOKEN_TYPE.name)!} ${SpUtil.getString(StoreKey.ACCESS_TOKEN.name)!}"});
+      isLoginSuccess = SpUtil.getString(StoreKey.ACCESS_TOKEN.name) != '';
+      if (isLoginSuccess) {
+        HttpDio.initOptions(SpUtil.getString(StoreKey.BASE_URL.name)!, {
+          "Authorization":
+              "${SpUtil.getString(StoreKey.TOKEN_TYPE.name)!} ${SpUtil.getString(StoreKey.ACCESS_TOKEN.name)!}"
+        });
       }
     });
   }
 
-  Widget getMainWidget(){
-
+  Widget getMainWidget() {
     _items = [
       const BottomNavigationBarItem(
           label: "首页",
@@ -84,9 +97,9 @@ class _MainAppWidgetState extends State<MainAppWidget> {
               } else {
                 return const Center(
                     child: CircularProgressIndicator(
-                      color: Colors.blue,
-                      backgroundColor: Colors.amberAccent,
-                    ));
+                  color: Colors.blue,
+                  backgroundColor: Colors.amberAccent,
+                ));
               }
             }),
         ManagerPage(),
@@ -129,24 +142,23 @@ class _MainAppWidgetState extends State<MainAppWidget> {
 
   // typedef IndexedWidgetBuilder = Widget Function(BuildContext context, int index);
 
-  loginoutCallback(){
+  loginoutCallback() {
     setState(() {
-      if(mounted){
+      if (mounted) {
         setState(() {
-          isLoginSuccess = SpUtil.getString(StoreKey.ACCESS_TOKEN.name)!='';
+          isLoginSuccess = SpUtil.getString(StoreKey.ACCESS_TOKEN.name) != '';
         });
       }
     });
   }
 
-  Widget getLogin(){
+  Widget getLogin() {
     return LoginPage(loginoutCallback);
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return isLoginSuccess?getMainWidget():getLogin();
+    return isLoginSuccess ? getMainWidget() : getLogin();
   }
 
   void _onPageChanged(int index) {
