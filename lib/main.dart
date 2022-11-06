@@ -1,8 +1,8 @@
 import 'package:ceee_manager/core/Consts.dart';
-import 'package:ceee_manager/page/account_page.dart';
+import 'package:ceee_manager/page/account/account_page.dart';
 import 'package:ceee_manager/page/first_page.dart';
-import 'package:ceee_manager/page/login_regist_page.dart';
-import 'package:ceee_manager/page/manager_page.dart';
+import 'package:ceee_manager/page/account/login_regist_page.dart';
+import 'package:ceee_manager/page/manager/manager_page.dart';
 import 'package:ceee_manager/util/data_store.dart';
 import 'package:ceee_manager/util/demoLocalizations.dart';
 import 'package:ceee_manager/util/http_util.dart';
@@ -146,7 +146,7 @@ class _MainAppWidgetState extends State<MainAppWidget> {
     setState(() {
       if (mounted) {
         setState(() {
-          isLoginSuccess = SpUtil.getString(StoreKey.ACCESS_TOKEN.name) != '';
+          isLoginSuccess = SpUtil.getString(StoreKey.ACCESS_TOKEN.name) != "";
         });
       }
     });

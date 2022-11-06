@@ -3,7 +3,6 @@ import 'package:ceee_manager/model/mymodels.dart';
 import 'package:ceee_manager/util/data_store.dart';
 import 'package:ceee_manager/util/http_util.dart';
 import 'package:ceee_manager/util/widge_util.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -37,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
                   controller: serverAddress,
                   decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.computer_outlined),
-                      hintText: "服务器地址如  http://localhost:8000",
+                      hintText: "服务器地址如  http://127.0.0.1:8084",
                       border: OutlineInputBorder()),
                 ),
                 const SizedBox(
@@ -78,8 +77,14 @@ class _LoginPageState extends State<LoginPage> {
                                   SpUtil.putString(StoreKey.BASE_URL.name, serverAddress.text);
                                   SpUtil.putString(StoreKey.TOKEN_TYPE.name, result.tokenType!);
                                   // HttpDio.initOptions(serverAddress.text,{"Authorization":"${result.tokenType} ${result.accessToken}"});
-                                  widget.loginSuccess();
-                                  WidgetUtil.showToast(context,"login Success!");
+                                  HttpDio.user_info().then((value) {
+                                    SpUtil.putObject(StoreKey.UERINFO.name, value.toJson());
+                                    widget.loginSuccess();
+                                    WidgetUtil.showToast(context,"登录成功!");
+                                  }).onError((error, stackTrace) {
+                                  WidgetUtil.showToast(context,"登录 获取客户信息 失败!");
+                                  });
+
                                 }else{
                                   WidgetUtil.showToast(context, result.msg!);
                                 }

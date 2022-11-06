@@ -24,4 +24,10 @@ class WidgetUtil{
     Toast.show(msg, duration: Toast.lengthShort, gravity:  Toast.bottom);
   }
 
+  static pushNavigator(BuildContext context, Widget widget){
+    Navigator.of(context).push(MaterialPageRoute(builder: (context){
+      return widget;
+    }));
+  }
+
 }

@@ -1,8 +1,9 @@
+import 'package:ceee_manager/model/UserInfo.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../core/Consts.dart';
-import '../util/data_store.dart';
+import '../../core/Consts.dart';
+import '../../util/data_store.dart';
 
 class AccountPage extends StatefulWidget {
   Function() loginoutCallback;
@@ -14,9 +15,13 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
+  late UserInfo userInfo ;
+
   @override
   void initState() {
-    // TODO: implement initState
+setState(() {
+  userInfo = UserInfo.fromJson(SpUtil.getObject(StoreKey.UERINFO.name));
+});
     super.initState();
   }
 
@@ -31,7 +36,7 @@ class _AccountPageState extends State<AccountPage> {
                   .push(MaterialPageRoute(builder: (BuildContext context) {
                 return Scaffold(
                   appBar: AppBar(
-                      title: Text(
+                      title: const Text(
                     "用户信息",
                   )),
                 );
@@ -43,6 +48,9 @@ class _AccountPageState extends State<AccountPage> {
       ),
       body: Column(
         children: [
+          Text("服务器地址：" + SpUtil.getString(StoreKey.BASE_URL.name)!),
+          Text("用户：${userInfo?.name}"  ),
+
           SizedBox(height: 10,),
           Row(
             children: [

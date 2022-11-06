@@ -1,10 +1,7 @@
-import 'package:ceee_manager/model/AuthModel.dart';
-import 'package:ceee_manager/model/SourceModel.dart';
-import 'package:ceee_manager/page/manager_auth_page.dart';
-import 'package:ceee_manager/page/manager_resource_page.dart';
-import 'package:ceee_manager/util/http_util.dart';
-import 'package:ceee_manager/util/widge_util.dart';
+import 'package:ceee_manager/page/manager/auth_list_page.dart';
 import 'package:flutter/material.dart';
+
+import 'source_list_page.dart';
 
 class ManagerPage extends StatefulWidget {
   const ManagerPage({Key? key}) : super(key: key);

@@ -45,7 +45,7 @@ class SpUtil {
   /// get object.
   static Map? getObject(String key) {
     String? _data = _prefs?.getString(key);
-    return (_data == null || _data.isEmpty) ? null : json.decode(_data);
+    return (_data == null || _data.isEmpty) ? {} : json.decode(_data);
   }
 
   /// put object list.

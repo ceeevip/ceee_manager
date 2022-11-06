@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
 
-import '../model/AuthModel.dart';
-import '../util/http_util.dart';
+import '../../model/AuthModel.dart';
+import '../../util/http_util.dart';
 
 class ManagerAuthPage extends StatefulWidget {
   const ManagerAuthPage({Key? key}) : super(key: key);
