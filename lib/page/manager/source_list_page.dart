@@ -13,6 +13,10 @@ class ManagerResourcePage extends StatefulWidget {
 }
 
 class _ManagerResourcePageState extends State<ManagerResourcePage> {
+  void callback() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -26,7 +30,8 @@ class _ManagerResourcePageState extends State<ManagerResourcePage> {
                   actions: [
                     InkWell(
                       onTap: () {
-                        WidgetUtil.pushNavigator(context, const SourceAddPage());
+                        WidgetUtil.pushNavigator(
+                            context, SourceAddPage(callback));
                       },
                       child: Icon(Icons.add),
                     ),
@@ -40,10 +45,7 @@ class _ManagerResourcePageState extends State<ManagerResourcePage> {
                     : ListView.builder(
                         itemCount: sms.length,
                         itemBuilder: (context, index) {
-                          return ListTile(
-                            leading: Icon(Icons.source),
-                            title: Text(sms[index].name ?? "无"),
-                          );
+                          return SourceTile(sms[index]);
                         },
                       ));
           } else {
@@ -54,3 +56,34 @@ class _ManagerResourcePageState extends State<ManagerResourcePage> {
         });
   }
 }
+
+
+class SourceTile extends StatefulWidget {
+  var sm;
+
+  SourceTile( this.sm, {Key? key}) : super(key: key);
+
+  @override
+  State<SourceTile> createState() => _SourceTileState();
+}
+
+class _SourceTileState extends State<SourceTile> {
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Icon(Icons.source),
+      title: Text(widget.sm.name ?? "无"),
+      trailing: Switch(
+        value: widget.sm.status== 0,
+        onChanged: (value) {
+          setState(() {
+            print("${widget.sm.name} - ${value}");
+            widget.sm.status = value ? 0 : 1;
+          });
+        },
+      ),
+    );
+  }
+}
+
+

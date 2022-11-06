@@ -73,4 +73,14 @@ class HttpDio {
       print(e);
     }
   }
+
+  static Future<SourceModel> create_source(SourceModel source) async{
+    try {
+    var resp = await dio.post("/auth/create_source",data: source.toJson());
+    return SourceModel.fromJson(resp.data);
+    } on DioError catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
 }

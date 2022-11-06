@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                                   SpUtil.putString(StoreKey.REFRESH_TOKEN.name, result.refreshToken!);
                                   SpUtil.putString(StoreKey.BASE_URL.name, serverAddress.text);
                                   SpUtil.putString(StoreKey.TOKEN_TYPE.name, result.tokenType!);
-                                  // HttpDio.initOptions(serverAddress.text,{"Authorization":"${result.tokenType} ${result.accessToken}"});
+                                  HttpDio.initOptions(serverAddress.text,{"Authorization":"${result.tokenType} ${result.accessToken}"});
                                   HttpDio.user_info().then((value) {
                                     SpUtil.putObject(StoreKey.UERINFO.name, value.toJson());
                                     widget.loginSuccess();
