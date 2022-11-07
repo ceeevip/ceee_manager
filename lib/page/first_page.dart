@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../generated/l10n.dart';
-import '../util/demoLocalizations.dart';
 
 class FirstPage extends StatefulWidget {
   const FirstPage({Key? key}) : super(key: key);
