@@ -4,7 +4,6 @@ import 'package:ceee_manager/page/first_page.dart';
 import 'package:ceee_manager/page/account/login_regist_page.dart';
 import 'package:ceee_manager/page/manager/manager_page.dart';
 import 'package:ceee_manager/util/data_store.dart';
-import 'package:ceee_manager/util/demoLocalizations.dart';
 import 'package:ceee_manager/util/http_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
