@@ -1,4 +1,5 @@
 import 'package:ceee_manager/page/manager/source_add_page.dart';
+import 'package:ceee_manager/page/manager/source_album_detail_page.dart';
 import 'package:ceee_manager/util/widge_util.dart';
 import 'package:flutter/material.dart';
 
@@ -45,7 +46,11 @@ class _ManagerResourcePageState extends State<ManagerResourcePage> {
                     : ListView.builder(
                         itemCount: sms.length,
                         itemBuilder: (context, index) {
-                          return SourceTile(sms[index]);
+                          return SourceTile(sms[index], (SourceModel sm) {
+                            setState(() {
+                              sms.remove(sm);
+                            });
+                          });
                         },
                       ));
           } else {
@@ -57,11 +62,11 @@ class _ManagerResourcePageState extends State<ManagerResourcePage> {
   }
 }
 
-
 class SourceTile extends StatefulWidget {
-  var sm;
+  SourceModel sm;
+  Null Function(SourceModel sm) deleteCall;
 
-  SourceTile( this.sm, {Key? key}) : super(key: key);
+  SourceTile(this.sm, this.deleteCall, {Key? key}) : super(key: key);
 
   @override
   State<SourceTile> createState() => _SourceTileState();
@@ -74,16 +79,39 @@ class _SourceTileState extends State<SourceTile> {
       leading: Icon(Icons.source),
       title: Text(widget.sm.name ?? "无"),
       trailing: Switch(
-        value: widget.sm.status== 0,
+        value: widget.sm.status == 0,
         onChanged: (value) {
-          setState(() {
-            print("${widget.sm.name} - ${value}");
-            widget.sm.status = value ? 0 : 1;
-          });
+          print("${widget.sm.name} - ${value}");
+          widget.sm.status = value ? 0 : 1;
+          HttpDio.update_source(widget.sm).then((value) => {setState(() {})});
         },
       ),
+      onTap: () => WidgetUtil.pushNavigator(context, SourceAlbumDetail(widget.sm)),
+      onLongPress: () {
+        //
+        showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                    title: Text("是否要删除源 ${widget.sm.name}?"),
+                    actions: <Widget>[
+                      ElevatedButton(
+                          child: Text("取消"),
+                          onPressed: () => Navigator.pop(context, "cancel")),
+                      ElevatedButton(
+                          child: Text("确定"),
+                          onPressed: () {
+                            HttpDio.delete_source(widget.sm)
+                                .then((value) => {
+                                      setState(() {
+                                        widget.deleteCall(widget.sm);
+                                        Navigator.pop(context, "yes");
+                                      })
+                                    })
+                                .onError((error, stackTrace) =>
+                                    {WidgetUtil.showToast(context, "删除失败")});
+                          }),
+                    ]));
+      },
     );
   }
 }
-
-
