@@ -18,6 +18,7 @@ class SourceAddPage extends StatefulWidget {
 class _SourceAddPageState extends State<SourceAddPage> {
   final TextEditingController _unameController = TextEditingController();
   final TextEditingController _pwdController = TextEditingController();
+  final TextEditingController _coverController = TextEditingController();
   final GlobalKey _formKey = GlobalKey<FormState>();
 
   late AuthModel _authModel;
@@ -25,6 +26,8 @@ class _SourceAddPageState extends State<SourceAddPage> {
   late String _apiVersion = "v1";
 
   List<AuthModel> auths = [];
+
+  String? coverUrl;
 
   @override
   void initState() {
@@ -108,7 +111,21 @@ class _SourceAddPageState extends State<SourceAddPage> {
                 return v!.trim().length <= 4 ? null : "密码不能大于4位";
               },
             ),
-            // 登录按钮
+            TextFormField(
+              controller: _coverController,
+              decoration:
+                  InputDecoration(labelText: "封面 URL", hintText: "封面 URL", icon: Icon(Icons.image)),
+              onChanged: (value) {
+                setState(() {
+                  coverUrl = value;
+                });
+              },
+              // obscureText: true,
+              //校验密码
+              // validator: (v) {
+              //   return v!.trim().length <= 4 ? null : "密码不能大于4位";
+              // },
+            ),
             Padding(
               padding: const EdgeInsets.only(top: 28.0),
               child: Row(
@@ -130,12 +147,14 @@ class _SourceAddPageState extends State<SourceAddPage> {
                               sourceType: _authModel.type,
                               apiVersion: _apiVersion,
                               password: _pwdController.text,
+                              urlAlbum: _coverController.text,
                               status: 1);
 
                           HttpDio.create_source(source).then((value) {
                             Navigator.pop(context);
                             widget.callback();
-                          }).catchError((error, stackTrace) => WidgetUtil.showToast(context, "create source Error"));
+                          }).catchError((error, stackTrace) =>
+                              WidgetUtil.showToast(context, "create source Error"));
                         } else {
                           print("失败不提交");
                         }
@@ -150,4 +169,15 @@ class _SourceAddPageState extends State<SourceAddPage> {
       ),
     );
   }
+
+
+  // StatelessWidget getCoverImage() {
+  //   try {
+  //     return coverUrl == null ? Icon(Icons.image) : ImageIcon(Image.network(coverUrl! ,errorBuilder: (_,__,___){
+  //       return Icon(Icons.image);
+  //     },).image);
+  //   } catch (e) {
+  //     return Icon(Icons.image);
+  //   }
+  // }
 }
