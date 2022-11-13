@@ -8,3 +8,7 @@ https://www.jianshu.com/p/d35db955e331
 ```
 flutter create --platforms=windows,macos,linux .
 ```
+
+# Feature
+[ ] 放开 album image url
+[ ] 
