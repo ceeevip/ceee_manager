@@ -71,8 +71,7 @@ class _SourceAddPageState extends State<SourceAddPage> {
               },
             ),
             DropdownButtonFormField(
-              decoration: const InputDecoration(
-                  labelText: "数据源", icon: Icon(Icons.source)),
+              decoration: const InputDecoration(labelText: "数据源", icon: Icon(Icons.source)),
               items: getAuthsList(),
               onChanged: (value) {
                 _authModel = value!;
@@ -83,8 +82,7 @@ class _SourceAddPageState extends State<SourceAddPage> {
             ),
             DropdownButtonFormField(
                 decoration: const InputDecoration(
-                    labelText: "API 版本",
-                    icon: Icon(Icons.domain_verification_outlined)),
+                    labelText: "API 版本", icon: Icon(Icons.domain_verification_outlined)),
                 items: const [
                   DropdownMenuItem(
                     value: "v1",
@@ -131,16 +129,13 @@ class _SourceAddPageState extends State<SourceAddPage> {
                               authId: _authModel.id,
                               sourceType: _authModel.type,
                               apiVersion: _apiVersion,
+                              password: _pwdController.text,
                               status: 1);
-                          try {
-                            HttpDio.create_source(source).then((value) {
-                              Navigator.pop(context);
-                              widget.callback();
-                            });
-                          } catch (e) {
-                            WidgetUtil.showToast(
-                                context, "create source Error:${e}");
-                          }
+
+                          HttpDio.create_source(source).then((value) {
+                            Navigator.pop(context);
+                            widget.callback();
+                          }).catchError((error, stackTrace) => WidgetUtil.showToast(context, "create source Error"));
                         } else {
                           print("失败不提交");
                         }

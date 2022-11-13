@@ -5,6 +5,7 @@ import 'package:ceee_manager/page/account/login_regist_page.dart';
 import 'package:ceee_manager/page/manager/manager_page.dart';
 import 'package:ceee_manager/util/data_store.dart';
 import 'package:ceee_manager/util/http_util.dart';
+import 'package:ceee_manager/util/theme_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -34,9 +35,8 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate
       ],
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeUtil.getThemeData(),
+      darkTheme: ThemeUtil.getThemeData(isDarkMode: true),
       home: const MainAppWidget(),
     );
   }
@@ -73,13 +73,9 @@ class _MainAppWidgetState extends State<MainAppWidget> {
   Widget getMainWidget() {
     _items = [
       const BottomNavigationBarItem(
-          label: "首页",
-          icon: Icon(Icons.home_outlined),
-          activeIcon: Icon(Icons.home)),
+          label: "首页", icon: Icon(Icons.home_outlined), activeIcon: Icon(Icons.home)),
       const BottomNavigationBarItem(
-          label: "管理",
-          icon: Icon(Icons.list_outlined),
-          activeIcon: Icon(Icons.list)),
+          label: "管理", icon: Icon(Icons.list_outlined), activeIcon: Icon(Icons.list)),
       const BottomNavigationBarItem(
           label: "我的",
           icon: Icon(Icons.account_circle_outlined),

@@ -1,0 +1,8 @@
+{
+  "path": "string",
+  "fs_id": "string",
+  "source_id": "string",
+  "name": "string",
+  "album_url": "string",
+  "id": "string"
+}

@@ -1,5 +1,6 @@
 import 'package:ceee_manager/page/manager/source_add_page.dart';
-import 'package:ceee_manager/page/manager/source_album_detail_page.dart';
+import 'package:ceee_manager/page/manager/source_album_manager_remote_page.dart';
+import 'package:ceee_manager/page/manager/source_albums_manager_page.dart';
 import 'package:ceee_manager/util/widge_util.dart';
 import 'package:flutter/material.dart';
 
@@ -76,7 +77,7 @@ class _SourceTileState extends State<SourceTile> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(Icons.source),
+      leading: Icon(Icons.water_drop),
       title: Text(widget.sm.name ?? "无"),
       trailing: Switch(
         value: widget.sm.status == 0,
@@ -86,7 +87,7 @@ class _SourceTileState extends State<SourceTile> {
           HttpDio.update_source(widget.sm).then((value) => {setState(() {})});
         },
       ),
-      onTap: () => WidgetUtil.pushNavigator(context, SourceAlbumDetail(widget.sm)),
+      onTap: () => WidgetUtil.pushNavigator(context, SourceAlbumsManagerPage(widget.sm)),
       onLongPress: () {
         //
         showDialog(
