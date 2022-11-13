@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../../model/AuthModel.dart';
@@ -20,23 +19,33 @@ class _ManagerAuthPageState extends State<ManagerAuthPage> {
           if (snapshot.connectionState == ConnectionState.done) {
             List<AuthModel>? sms = snapshot.data;
             return Scaffold(
-                appBar: AppBar(title: Text("资源管理"),
-                  actions: [InkWell(onTap: (){
-
-                },child: Icon(Icons.add),),SizedBox(width: 10,)],),
+                appBar: AppBar(
+                  title: Text("资源管理"),
+                  actions: [
+                    InkWell(
+                      onTap: () {},
+                      child: Icon(Icons.add),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    )
+                  ],
+                ),
                 body: sms == null
                     ? Center(child: Text("Error"))
                     : ListView.builder(
-                  itemCount: sms.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      leading: Icon(Icons.source),
-                      title: Text(sms[index].name ?? "无"),
-                    );
-                  },
-                ));
+                        itemCount: sms.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            leading: Icon(Icons.source),
+                            title: Text(sms[index].name ?? "无"),
+                          );
+                        },
+                      ));
           } else {
-            return Center(child: CircularProgressIndicator(),);
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           }
         });
   }
