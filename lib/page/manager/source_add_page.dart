@@ -147,7 +147,7 @@ class _SourceAddPageState extends State<SourceAddPage> {
                               sourceType: _authModel.type,
                               apiVersion: _apiVersion,
                               password: _pwdController.text,
-                              urlAlbum: _coverController.text,
+                              cover: _coverController.text,
                               status: 1);
 
                           HttpDio.create_source(source).then((value) {

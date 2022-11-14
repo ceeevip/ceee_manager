@@ -2,7 +2,7 @@
 /// name : "string"
 /// auth_id : "string"
 /// source_type : "string"
-/// url_album : "string"
+/// cover : "string"
 /// api_version : "v1"
 /// status : 0
 /// password : "string"
@@ -13,7 +13,7 @@ class SourceModel {
       this.name, 
       this.authId, 
       this.sourceType, 
-      this.urlAlbum, 
+      this.cover, 
       this.apiVersion, 
       this.status, 
       this.password,});
@@ -23,7 +23,7 @@ class SourceModel {
     name = json['name'];
     authId = json['auth_id'];
     sourceType = json['source_type'];
-    urlAlbum = json['url_album'];
+    cover = json['cover'];
     apiVersion = json['api_version'];
     status = json['status'];
     password = json['password'];
@@ -32,7 +32,7 @@ class SourceModel {
   String? name;
   String? authId;
   String? sourceType;
-  String? urlAlbum;
+  String? cover;
   String? apiVersion;
   int? status;
   String? password;
@@ -40,7 +40,7 @@ SourceModel copyWith({  String? id,
   String? name,
   String? authId,
   String? sourceType,
-  String? urlAlbum,
+  String? cover,
   String? apiVersion,
   int? status,
   String? password,
@@ -48,7 +48,7 @@ SourceModel copyWith({  String? id,
   name: name ?? this.name,
   authId: authId ?? this.authId,
   sourceType: sourceType ?? this.sourceType,
-  urlAlbum: urlAlbum ?? this.urlAlbum,
+  cover: cover ?? this.cover,
   apiVersion: apiVersion ?? this.apiVersion,
   status: status ?? this.status,
   password: password ?? this.password,
@@ -59,7 +59,7 @@ SourceModel copyWith({  String? id,
     map['name'] = name;
     map['auth_id'] = authId;
     map['source_type'] = sourceType;
-    map['url_album'] = urlAlbum;
+    map['cover'] = cover;
     map['api_version'] = apiVersion;
     map['status'] = status;
     map['password'] = password;
