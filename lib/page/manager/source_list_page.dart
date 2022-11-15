@@ -35,10 +35,10 @@ class _ManagerResourcePageState extends State<ManagerResourcePage> {
                         WidgetUtil.pushNavigator(
                             context, SourceAddPage(callback));
                       },
-                      child: Icon(Icons.add),
+                      child: Icon(Icons.add_circle_sharp),
                     ),
                     const SizedBox(
-                      width: 10,
+                      width: 15,
                     )
                   ],
                 ),
@@ -77,9 +77,8 @@ class _SourceTileState extends State<SourceTile> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(Icons.water_drop),
-      title: Text(widget.sm.name ?? "无"),
-      trailing: Switch(
+      leading: Switch(
+        activeColor: Colors.redAccent,
         value: widget.sm.status == 0,
         onChanged: (value) {
           print("${widget.sm.name} - ${value}");
@@ -87,6 +86,8 @@ class _SourceTileState extends State<SourceTile> {
           HttpDio.update_source(widget.sm).then((value) => {setState(() {})});
         },
       ),
+      title: Text(widget.sm.name ?? "无"),
+      trailing:  const Icon(Icons.settings,color: Colors.redAccent,),
       onTap: () => WidgetUtil.pushNavigator(context, SourceAlbumsManagerPage(widget.sm)),
       onLongPress: () {
         //

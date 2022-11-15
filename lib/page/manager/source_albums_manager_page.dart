@@ -13,9 +13,9 @@ class SourceAlbumsManagerPage extends StatefulWidget {
   SourceModel sourceModel;
   String shareLink = "---";
 
-  SourceAlbumsManagerPage(this.sourceModel, {Key? key}) : super(key: key){
+  SourceAlbumsManagerPage(this.sourceModel, {Key? key}) : super(key: key) {
     shareLink =
-        "${SpUtil.getString(StoreKey.BASE_URL.name)}/api/source/${sourceModel.id!}?pwd=${sourceModel.password}" ;
+        "${SpUtil.getString(StoreKey.BASE_URL.name)}/api/source/${sourceModel.id!}?pwd=${sourceModel.password}";
   }
 
   @override
@@ -24,8 +24,6 @@ class SourceAlbumsManagerPage extends StatefulWidget {
 
 class _SourceAlbumsManagerPageState extends State<SourceAlbumsManagerPage> {
   late List<AlbumModel> albums;
-
-
 
   @override
   void initState() {
@@ -47,27 +45,35 @@ class _SourceAlbumsManagerPageState extends State<SourceAlbumsManagerPage> {
                   builder: (context) => SimpleDialog(
                         title: Text("分享"),
                         children: [
-                          SelectableText.rich(TextSpan(text: widget.shareLink,style: TextStyle(color: Colors.red))),
-                          Row(children: [Spacer(),ElevatedButton(
-                              child: Text("复制"),
-                              onPressed: () {
-                                //TODO copy to mem
-                                Clipboard.setData(ClipboardData(text: widget.shareLink));
-                                WidgetUtil.showToast(context, "复制成功");
-                                Navigator.pop(context, "copy");
-                              }),
-                            SizedBox(width: 15,),
-                            ElevatedButton(
-                                child: Text("取消"),
-                                onPressed: () {
-                                  //TODO copy to mem
-                                  Navigator.pop(context, "cancel");
-                                }),Spacer(),],)
-
+                          SelectableText.rich(TextSpan(
+                              text: widget.shareLink, style: TextStyle(color: Colors.red))),
+                          Row(
+                            children: [
+                              Spacer(),
+                              ElevatedButton(
+                                  child: Text("复制"),
+                                  onPressed: () {
+                                    //TODO copy to mem
+                                    Clipboard.setData(ClipboardData(text: widget.shareLink));
+                                    WidgetUtil.showToast(context, "复制成功");
+                                    Navigator.pop(context, "copy");
+                                  }),
+                              SizedBox(
+                                width: 15,
+                              ),
+                              ElevatedButton(
+                                  child: Text("取消"),
+                                  onPressed: () {
+                                    //TODO copy to mem
+                                    Navigator.pop(context, "cancel");
+                                  }),
+                              Spacer(),
+                            ],
+                          )
                         ],
                       ));
             },
-            child: Icon(Icons.share_outlined),
+            child: Icon(Icons.share_sharp),
           ),
           SizedBox(
             width: 10,
@@ -75,7 +81,7 @@ class _SourceAlbumsManagerPageState extends State<SourceAlbumsManagerPage> {
           InkWell(
             onTap: () => WidgetUtil.pushNavigator(
                 context, SourceAlbumRemoteManager(widget.sourceModel, albums)),
-            child: Icon(Icons.manage_accounts_outlined),
+            child: Icon(Icons.add_to_drive_outlined),
           ),
           SizedBox(
             width: 15,
@@ -94,9 +100,22 @@ class _SourceAlbumsManagerPageState extends State<SourceAlbumsManagerPage> {
               return ListView.builder(
                   itemCount: albums.length,
                   itemBuilder: (context, index) => ListTile(
-                        leading: const Icon(Icons.folder),
+                        leading: const Icon(Icons.folder,color: Colors.amber,),
                         title: Text(albums[index].name!),
-                        trailing: const Icon(Icons.delete_forever_outlined),
+                        trailing: InkWell(
+                          child: const Icon(Icons.delete_forever_sharp),
+                          onTap: () {
+                            HttpDio.delete_album(albums[index])
+                                .then((value) => {
+                                      setState(() {
+                                        WidgetUtil.showToast(context, "已经删除");
+                                      })
+                                    })
+                                .catchError((error, stackTrace) {
+                              WidgetUtil.showToast(context, "删除失败");
+                            });
+                          },
+                        ),
                         onTap: () {
                           // setState(() {
                           //   print(albums[index]);

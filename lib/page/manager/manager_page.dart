@@ -17,7 +17,7 @@ class _ManagerPageState extends State<ManagerPage> {
       body: ListView(
         children: [
           ListTile(
-            leading: Icon(Icons.water_drop_outlined),
+            leading: Icon(Icons.water_drop_sharp,color: Colors.redAccent,),
             title: Text("源管理"),
             trailing: InkWell(
               child: Icon(Icons.arrow_right),
@@ -28,7 +28,7 @@ class _ManagerPageState extends State<ManagerPage> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.source_outlined),
+            leading: Icon(Icons.source_sharp,color: Colors.redAccent),
             title: Text("存储认证管理"),
             trailing: InkWell(
               child: Icon(Icons.arrow_right),

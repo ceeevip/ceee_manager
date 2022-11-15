@@ -108,7 +108,7 @@ class _SourceAlbumRemoteManagerState extends State<SourceAlbumRemoteManager> {
                 return ListView.builder(
                     itemCount: currentPathFiles.length,
                     itemBuilder: (context, index) => ListTile(
-                          leading: const Icon(Icons.folder),
+                          leading: Icon(Icons.folder,color: widget.strAlbums.contains(currentPathFiles[index].path)?Colors.amber:null,),
                           title: Text(pathname(currentPathFiles[index].path!)),
                           trailing: Switch(
                             value: widget.strAlbums.contains(currentPathFiles[index].path),
@@ -117,7 +117,6 @@ class _SourceAlbumRemoteManagerState extends State<SourceAlbumRemoteManager> {
                               var thisFile = currentPathFiles[index];
                               if (value) {
                                 //add
-
                                 AlbumModel albumModel = AlbumModel(
                                   path: thisFile.path,
                                   fsId: thisFile.fsId,
