@@ -15,13 +15,13 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
-  late UserInfo userInfo ;
+  late UserInfo userInfo;
 
   @override
   void initState() {
-setState(() {
-  userInfo = UserInfo.fromJson(SpUtil.getObject(StoreKey.UERINFO.name));
-});
+    setState(() {
+      userInfo = UserInfo.fromJson(SpUtil.getObject(StoreKey.UERINFO.name));
+    });
     super.initState();
   }
 
@@ -32,8 +32,7 @@ setState(() {
         actions: [
           InkWell(
             onTap: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (BuildContext context) {
+              Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) {
                 return Scaffold(
                   appBar: AppBar(
                       title: const Text(
@@ -48,23 +47,42 @@ setState(() {
       ),
       body: Column(
         children: [
-          Text("服务器地址：" + SpUtil.getString(StoreKey.BASE_URL.name)!),
-          Text("用户：${userInfo?.name}"  ),
-
-          SizedBox(height: 10,),
+          const Padding(
+            padding: EdgeInsets.only(left: 15, top: 10, bottom: 10),
+            child: Text(
+              "服务器信息",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.home_max_outlined),
+            title: const Text("服务器地址"),
+            subtitle: SelectableText.rich(TextSpan(text: "${SpUtil.getString(StoreKey.BASE_URL.name)!}")),
+          ),
+          Divider(),
+          const SizedBox(
+            height: 10,
+          ),
+          ListTile(leading: const Icon(Icons.person),
+              title: Text("用户"),
+          subtitle: Text(userInfo.name!)),
+          Divider(),
+          Spacer(),
           Row(
             children: [
-              Expanded(child:
-              ElevatedButton(
+              Expanded(
+                  child: ElevatedButton(
                 child: Text("退出"),
                 onPressed: () {
                   SpUtil.remove(StoreKey.ACCESS_TOKEN.name);
                   widget.loginoutCallback();
                 },
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.red)),
+                style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.red)),
               )),
             ],
+          ),
+          SizedBox(
+            height: 10,
           )
         ],
       ),

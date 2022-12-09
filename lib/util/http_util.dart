@@ -1,4 +1,5 @@
 import 'package:ceee_manager/core/CeeeException.dart';
+import 'package:ceee_manager/model/AlbumModel.dart';
 import 'package:ceee_manager/model/AuthModel.dart';
 import 'package:ceee_manager/model/DirectoryModel.dart';
 import 'package:ceee_manager/model/SourceModel.dart';
@@ -51,9 +52,23 @@ class HttpDio {
   static Future<List<SourceModel>?> sources_list() async {
     try {
       List<SourceModel> rs = [];
-      var jsStr = await dio.get("/auth/list_source");
-      for (var source in jsStr.data) {
+      var jsonStr = await dio.get("/auth/list_source");
+      for (var source in jsonStr.data) {
         rs.add(SourceModel.fromJson(source));
+      }
+      return rs;
+    } on DioError catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
+  static Future<List<AlbumModel>?> get_albums(SourceModel sourceModel) async {
+    try {
+      List<AlbumModel> rs = [];
+      var jsonStr = await dio.get("/auth/get_albums",queryParameters: {"source_id":sourceModel.id});
+      for (var source in jsonStr.data) {
+        rs.add(AlbumModel.fromJson(source));
       }
       return rs;
     } on DioError catch (e) {
@@ -118,4 +133,26 @@ class HttpDio {
       rethrow;
     }
   }
+
+  static Future<SourceModel> create_album(AlbumModel albums) async {
+    try {
+      var resp = await dio.post("/auth/create_album", data: albums.toJson());
+      return SourceModel.fromJson(resp.data);
+    } on DioError catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
+  static Future<AlbumModel> delete_album(AlbumModel album) async {
+    try {
+      var resp = await dio.post("/auth/delete_album", data: album.toJson());
+      return AlbumModel.fromJson(resp.data);
+    } on DioError catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
+
 }

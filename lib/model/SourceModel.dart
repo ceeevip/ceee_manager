@@ -6,7 +6,6 @@
 /// api_version : "v1"
 /// status : 0
 /// password : "string"
-/// file_type : "audio"
 
 class SourceModel {
   SourceModel({
@@ -17,8 +16,7 @@ class SourceModel {
       this.cover, 
       this.apiVersion, 
       this.status, 
-      this.password, 
-      this.fileType,});
+      this.password,});
 
   SourceModel.fromJson(dynamic json) {
     id = json['id'];
@@ -29,7 +27,6 @@ class SourceModel {
     apiVersion = json['api_version'];
     status = json['status'];
     password = json['password'];
-    fileType = json['file_type'];
   }
   String? id;
   String? name;
@@ -39,7 +36,6 @@ class SourceModel {
   String? apiVersion;
   int? status;
   String? password;
-  String? fileType;
 SourceModel copyWith({  String? id,
   String? name,
   String? authId,
@@ -48,7 +44,6 @@ SourceModel copyWith({  String? id,
   String? apiVersion,
   int? status,
   String? password,
-  String? fileType,
 }) => SourceModel(  id: id ?? this.id,
   name: name ?? this.name,
   authId: authId ?? this.authId,
@@ -57,7 +52,6 @@ SourceModel copyWith({  String? id,
   apiVersion: apiVersion ?? this.apiVersion,
   status: status ?? this.status,
   password: password ?? this.password,
-  fileType: fileType ?? this.fileType,
 );
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -69,17 +63,7 @@ SourceModel copyWith({  String? id,
     map['api_version'] = apiVersion;
     map['status'] = status;
     map['password'] = password;
-    map['file_type'] = fileType;
     return map;
   }
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is SourceModel &&
-          runtimeType == other.runtimeType &&
-          id == other.id;
-
-  @override
-  int get hashCode => id.hashCode;
 }

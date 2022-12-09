@@ -2,6 +2,7 @@ import 'package:ceee_manager/model/AuthModel.dart';
 import 'package:ceee_manager/model/SourceModel.dart';
 import 'package:ceee_manager/util/http_util.dart';
 import 'package:ceee_manager/util/widge_util.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -14,11 +15,10 @@ class SourceAddPage extends StatefulWidget {
   State<SourceAddPage> createState() => _SourceAddPageState();
 }
 
-enum FileType { audio, epub }
-
 class _SourceAddPageState extends State<SourceAddPage> {
   final TextEditingController _unameController = TextEditingController();
   final TextEditingController _pwdController = TextEditingController();
+  final TextEditingController _coverController = TextEditingController();
   final GlobalKey _formKey = GlobalKey<FormState>();
 
   late AuthModel _authModel;
@@ -27,7 +27,7 @@ class _SourceAddPageState extends State<SourceAddPage> {
 
   List<AuthModel> auths = [];
 
-  FileType fileType = FileType.audio;
+  String? coverUrl;
 
   @override
   void initState() {
@@ -74,8 +74,7 @@ class _SourceAddPageState extends State<SourceAddPage> {
               },
             ),
             DropdownButtonFormField(
-              decoration: const InputDecoration(
-                  labelText: "数据源", icon: Icon(Icons.source)),
+              decoration: const InputDecoration(labelText: "数据源", icon: Icon(Icons.source)),
               items: getAuthsList(),
               onChanged: (value) {
                 _authModel = value!;
@@ -86,8 +85,7 @@ class _SourceAddPageState extends State<SourceAddPage> {
             ),
             DropdownButtonFormField(
                 decoration: const InputDecoration(
-                    labelText: "API 版本",
-                    icon: Icon(Icons.domain_verification_outlined)),
+                    labelText: "API 版本", icon: Icon(Icons.domain_verification_outlined)),
                 items: const [
                   DropdownMenuItem(
                     value: "v1",
@@ -113,26 +111,21 @@ class _SourceAddPageState extends State<SourceAddPage> {
                 return v!.trim().length <= 4 ? null : "密码不能大于4位";
               },
             ),
-            DropdownButtonFormField(
-                decoration: const InputDecoration(
-                  labelText: "类型",
-                  hintText: "类型",
-                  icon: Icon(Icons.file_present_outlined),
-                ),
-                items: const [
-                  DropdownMenuItem(
-                    child: Text("音频"),
-                    value: FileType.audio,
-                  ),
-                  DropdownMenuItem(
-                    child: Text("书籍"),
-                    value: FileType.epub,
-                  )
-                ],
-                onChanged: (v) {
-                  fileType =v!;
-                }),
-            // 登录按钮
+            TextFormField(
+              controller: _coverController,
+              decoration:
+                  InputDecoration(labelText: "封面 URL", hintText: "封面 URL", icon: Icon(Icons.image)),
+              onChanged: (value) {
+                setState(() {
+                  coverUrl = value;
+                });
+              },
+              // obscureText: true,
+              //校验密码
+              // validator: (v) {
+              //   return v!.trim().length <= 4 ? null : "密码不能大于4位";
+              // },
+            ),
             Padding(
               padding: const EdgeInsets.only(top: 28.0),
               child: Row(
@@ -154,17 +147,14 @@ class _SourceAddPageState extends State<SourceAddPage> {
                               sourceType: _authModel.type,
                               apiVersion: _apiVersion,
                               password: _pwdController.text,
-                              fileType: fileType.name,
+                              cover: _coverController.text,
                               status: 1);
-                          try {
-                            HttpDio.create_source(source).then((value) {
-                              Navigator.pop(context);
-                              widget.callback();
-                            });
-                          } catch (e) {
-                            WidgetUtil.showToast(
-                                context, "create source Error:${e}");
-                          }
+
+                          HttpDio.create_source(source).then((value) {
+                            Navigator.pop(context);
+                            widget.callback();
+                          }).catchError((error, stackTrace) =>
+                              WidgetUtil.showToast(context, "create source Error"));
                         } else {
                           print("失败不提交");
                         }
@@ -179,4 +169,15 @@ class _SourceAddPageState extends State<SourceAddPage> {
       ),
     );
   }
+
+
+  // StatelessWidget getCoverImage() {
+  //   try {
+  //     return coverUrl == null ? Icon(Icons.image) : ImageIcon(Image.network(coverUrl! ,errorBuilder: (_,__,___){
+  //       return Icon(Icons.image);
+  //     },).image);
+  //   } catch (e) {
+  //     return Icon(Icons.image);
+  //   }
+  // }
 }

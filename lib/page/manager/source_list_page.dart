@@ -1,5 +1,6 @@
 import 'package:ceee_manager/page/manager/source_add_page.dart';
-import 'package:ceee_manager/page/manager/source_album_detail_page.dart';
+import 'package:ceee_manager/page/manager/source_album_manager_remote_page.dart';
+import 'package:ceee_manager/page/manager/source_albums_manager_page.dart';
 import 'package:ceee_manager/util/widge_util.dart';
 import 'package:flutter/material.dart';
 
@@ -34,10 +35,10 @@ class _ManagerResourcePageState extends State<ManagerResourcePage> {
                         WidgetUtil.pushNavigator(
                             context, SourceAddPage(callback));
                       },
-                      child: Icon(Icons.add),
+                      child: Icon(Icons.add_circle_sharp),
                     ),
                     const SizedBox(
-                      width: 10,
+                      width: 15,
                     )
                   ],
                 ),
@@ -76,9 +77,8 @@ class _SourceTileState extends State<SourceTile> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(Icons.source),
-      title: Text(widget.sm.name ?? "无"),
-      trailing: Switch(
+      leading: Switch(
+        activeColor: Colors.redAccent,
         value: widget.sm.status == 0,
         onChanged: (value) {
           print("${widget.sm.name} - ${value}");
@@ -86,7 +86,9 @@ class _SourceTileState extends State<SourceTile> {
           HttpDio.update_source(widget.sm).then((value) => {setState(() {})});
         },
       ),
-      onTap: () => WidgetUtil.pushNavigator(context, SourceAlbumDetail(widget.sm)),
+      title: Text(widget.sm.name ?? "无"),
+      trailing:  const Icon(Icons.settings,color: Colors.redAccent,),
+      onTap: () => WidgetUtil.pushNavigator(context, SourceAlbumsManagerPage(widget.sm)),
       onLongPress: () {
         //
         showDialog(
