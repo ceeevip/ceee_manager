@@ -2,7 +2,6 @@ import 'package:ceee_manager/model/AuthModel.dart';
 import 'package:ceee_manager/model/SourceModel.dart';
 import 'package:ceee_manager/util/http_util.dart';
 import 'package:ceee_manager/util/widge_util.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +14,8 @@ class SourceAddPage extends StatefulWidget {
   State<SourceAddPage> createState() => _SourceAddPageState();
 }
 
+enum FileType { audio, epub }
+
 class _SourceAddPageState extends State<SourceAddPage> {
   final TextEditingController _unameController = TextEditingController();
   final TextEditingController _pwdController = TextEditingController();
@@ -25,6 +26,8 @@ class _SourceAddPageState extends State<SourceAddPage> {
   late String _apiVersion = "v1";
 
   List<AuthModel> auths = [];
+
+  FileType fileType = FileType.audio;
 
   @override
   void initState() {
@@ -110,6 +113,25 @@ class _SourceAddPageState extends State<SourceAddPage> {
                 return v!.trim().length <= 4 ? null : "密码不能大于4位";
               },
             ),
+            DropdownButtonFormField(
+                decoration: const InputDecoration(
+                  labelText: "类型",
+                  hintText: "类型",
+                  icon: Icon(Icons.file_present_outlined),
+                ),
+                items: const [
+                  DropdownMenuItem(
+                    child: Text("音频"),
+                    value: FileType.audio,
+                  ),
+                  DropdownMenuItem(
+                    child: Text("书籍"),
+                    value: FileType.epub,
+                  )
+                ],
+                onChanged: (v) {
+                  fileType =v!;
+                }),
             // 登录按钮
             Padding(
               padding: const EdgeInsets.only(top: 28.0),
@@ -131,6 +153,8 @@ class _SourceAddPageState extends State<SourceAddPage> {
                               authId: _authModel.id,
                               sourceType: _authModel.type,
                               apiVersion: _apiVersion,
+                              password: _pwdController.text,
+                              fileType: fileType.name,
                               status: 1);
                           try {
                             HttpDio.create_source(source).then((value) {
