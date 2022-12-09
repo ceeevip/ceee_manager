@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+enum FileType { audio, epub }
 class SourceAddPage extends StatefulWidget {
   void Function() callback;
 
@@ -50,13 +51,15 @@ class _SourceAddPageState extends State<SourceAddPage> {
     return items;
   }
 
+  FileType fileType = FileType.audio;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("添加源"),
       ),
-      body: Form(
+      body: SingleChildScrollView(child: Form(
         key: _formKey, //设置globalKey，用于后面获取FormState
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: Column(
@@ -126,6 +129,25 @@ class _SourceAddPageState extends State<SourceAddPage> {
               //   return v!.trim().length <= 4 ? null : "密码不能大于4位";
               // },
             ),
+            DropdownButtonFormField(
+                decoration: const InputDecoration(
+                  labelText: "类型",
+                  hintText: "类型",
+                  icon: Icon(Icons.file_present_outlined),
+                ),
+                items: const [
+                  DropdownMenuItem(
+                    child: Text("音频"),
+                    value: FileType.audio,
+                  ),
+                  DropdownMenuItem(
+                    child: Text("书籍"),
+                    value: FileType.epub,
+                  )
+                ],
+                onChanged: (v) {
+                  fileType =v!;
+                }),
             Padding(
               padding: const EdgeInsets.only(top: 28.0),
               child: Row(
@@ -148,6 +170,7 @@ class _SourceAddPageState extends State<SourceAddPage> {
                               apiVersion: _apiVersion,
                               password: _pwdController.text,
                               cover: _coverController.text,
+                              fileType: fileType.name,
                               status: 1);
 
                           HttpDio.create_source(source).then((value) {
@@ -166,7 +189,7 @@ class _SourceAddPageState extends State<SourceAddPage> {
             )
           ],
         ),
-      ),
+      ),),
     );
   }
 

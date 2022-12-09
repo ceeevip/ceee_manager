@@ -2,6 +2,7 @@ import 'package:ceee_manager/page/manager/source_add_page.dart';
 import 'package:ceee_manager/page/manager/source_album_manager_remote_page.dart';
 import 'package:ceee_manager/page/manager/source_albums_manager_page.dart';
 import 'package:ceee_manager/util/widge_util.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../model/SourceModel.dart';
@@ -93,13 +94,13 @@ class _SourceTileState extends State<SourceTile> {
         //
         showDialog(
             context: context,
-            builder: (context) => AlertDialog(
+            builder: (context) => CupertinoAlertDialog(
                     title: Text("是否要删除源 ${widget.sm.name}?"),
                     actions: <Widget>[
-                      ElevatedButton(
+                      CupertinoDialogAction(
                           child: Text("取消"),
                           onPressed: () => Navigator.pop(context, "cancel")),
-                      ElevatedButton(
+                      CupertinoDialogAction(
                           child: Text("确定"),
                           onPressed: () {
                             HttpDio.delete_source(widget.sm)

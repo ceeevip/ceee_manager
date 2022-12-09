@@ -6,5 +6,6 @@
   "cover": "string",
   "api_version": "v1",
   "status": 0,
-  "password": "string"
+  "password": "string",
+  "file_type": "string"
 }
