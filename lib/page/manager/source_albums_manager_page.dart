@@ -4,6 +4,7 @@ import 'package:ceee_manager/model/SourceModel.dart';
 import 'package:ceee_manager/page/manager/source_album_manager_remote_page.dart';
 import 'package:ceee_manager/util/data_store.dart';
 import 'package:ceee_manager/util/http_util.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -19,7 +20,8 @@ class SourceAlbumsManagerPage extends StatefulWidget {
   }
 
   @override
-  State<SourceAlbumsManagerPage> createState() => _SourceAlbumsManagerPageState();
+  State<SourceAlbumsManagerPage> createState() =>
+      _SourceAlbumsManagerPageState();
 }
 
 class _SourceAlbumsManagerPageState extends State<SourceAlbumsManagerPage> {
@@ -42,34 +44,27 @@ class _SourceAlbumsManagerPageState extends State<SourceAlbumsManagerPage> {
             onTap: () {
               showDialog(
                   context: context,
-                  builder: (context) => SimpleDialog(
+                  builder: (context) => CupertinoAlertDialog(
                         title: Text("分享"),
-                        children: [
-                          SelectableText.rich(TextSpan(
-                              text: widget.shareLink, style: TextStyle(color: Colors.red))),
-                          Row(
-                            children: [
-                              Spacer(),
-                              ElevatedButton(
-                                  child: Text("复制"),
-                                  onPressed: () {
-                                    //TODO copy to mem
-                                    Clipboard.setData(ClipboardData(text: widget.shareLink));
-                                    WidgetUtil.showToast(context, "复制成功");
-                                    Navigator.pop(context, "copy");
-                                  }),
-                              SizedBox(
-                                width: 15,
-                              ),
-                              ElevatedButton(
-                                  child: Text("取消"),
-                                  onPressed: () {
-                                    //TODO copy to mem
-                                    Navigator.pop(context, "cancel");
-                                  }),
-                              Spacer(),
-                            ],
-                          )
+                        content: SelectableText.rich(TextSpan(
+                            text: widget.shareLink,
+                            style: TextStyle(color: Colors.red))),
+                        actions: [
+                          CupertinoDialogAction(
+                              child: Text("复制"),
+                              onPressed: () {
+                                //TODO copy to mem
+                                Clipboard.setData(
+                                    ClipboardData(text: widget.shareLink));
+                                WidgetUtil.showToast(context, "复制成功");
+                                Navigator.pop(context, "copy");
+                              }),
+                          CupertinoDialogAction(
+                              child: Text("取消"),
+                              onPressed: () {
+                                //TODO copy to mem
+                                Navigator.pop(context, "cancel");
+                              }),
                         ],
                       ));
             },
@@ -94,13 +89,17 @@ class _SourceAlbumsManagerPageState extends State<SourceAlbumsManagerPage> {
             if (snapshot.hasError) {
               return WidgetUtil.getFutureBuilderErrorPage(context, setState);
             }
-            if (snapshot.connectionState == ConnectionState.done && !snapshot.hasError) {
+            if (snapshot.connectionState == ConnectionState.done &&
+                !snapshot.hasError) {
               albums = snapshot.data ?? [];
 
               return ListView.builder(
                   itemCount: albums.length,
                   itemBuilder: (context, index) => ListTile(
-                        leading: const Icon(Icons.folder,color: Colors.amber,),
+                        leading: const Icon(
+                          Icons.folder,
+                          color: Colors.amber,
+                        ),
                         title: Text(albums[index].name!),
                         trailing: InkWell(
                           child: const Icon(Icons.delete_forever_sharp),
