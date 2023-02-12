@@ -2,8 +2,6 @@ import 'package:ceee_manager/model/AuthModel.dart';
 import 'package:ceee_manager/model/SourceModel.dart';
 import 'package:ceee_manager/util/http_util.dart';
 import 'package:ceee_manager/util/widge_util.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 enum FileType { audio, epub }
@@ -117,7 +115,7 @@ class _SourceAddPageState extends State<SourceAddPage> {
             TextFormField(
               controller: _coverController,
               decoration:
-                  InputDecoration(labelText: "封面 URL", hintText: "封面 URL", icon: Icon(Icons.image)),
+                  const InputDecoration(labelText: "封面 URL", hintText: "封面 URL", icon: Icon(Icons.image)),
               onChanged: (value) {
                 setState(() {
                   coverUrl = value;
@@ -154,8 +152,8 @@ class _SourceAddPageState extends State<SourceAddPage> {
                 children: <Widget>[
                   Expanded(
                     child: ElevatedButton(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
+                      child: const Padding(
+                        padding: EdgeInsets.all(16.0),
                         child: Text("确定"),
                       ),
                       onPressed: () async {

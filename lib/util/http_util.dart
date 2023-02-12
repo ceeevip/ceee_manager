@@ -30,8 +30,7 @@ class HttpDio {
           refreshToken: response.data['refresh_token'],
           tokenType: response.data['token_type']);
     } on DioError catch (e) {
-      print(e.response);
-      return LoginResponseEntity(false, msg: "${e.response}");
+      return LoginResponseEntity(false, msg: "${e.error}");
     }
   }
 
@@ -93,6 +92,16 @@ class HttpDio {
   static Future<SourceModel> create_source(SourceModel source) async {
     try {
       var resp = await dio.post("/auth/create_source", data: source.toJson());
+      return SourceModel.fromJson(resp.data);
+    } on DioError catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
+  static Future<SourceModel> create_auth(AuthModel authModel) async {
+    try {
+      var resp = await dio.post("/auth/create_auth", data: authModel.toJson());
       return SourceModel.fromJson(resp.data);
     } on DioError catch (e) {
       print(e);

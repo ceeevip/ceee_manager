@@ -1,0 +1,8 @@
+{
+  "id": "string",
+  "type": "string",
+  "avatar_url": "string",
+  "name": "string",
+  "alias_name": "string",
+  "init_path": "string"
+}

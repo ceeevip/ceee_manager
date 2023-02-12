@@ -1,59 +1,42 @@
-/// id : "1"
-/// type : "bdp"
-/// avatar_url : "https://dss0.bdstatic.com/7Ls0a8Sm1A5BphGlnYG/sys/portrait/item/netdisk.1.c271bd87.CDfCGF36OdUBEVLwioRRYw.jpg"
-/// name : "yinlei126"
-/// alias_name : "ddfwq111"
+/// id : "string"
+/// type : "string"
+/// avatar_url : "string"
+/// name : "string"
+/// alias_name : "string"
+/// init_path : "string"
 
 class AuthModel {
   AuthModel({
-      String? id, 
-      String? type, 
-      String? avatarUrl, 
-      String? name, 
-      String? aliasName,}){
-    _id = id;
-    _type = type;
-    _avatarUrl = avatarUrl;
-    _name = name;
-    _aliasName = aliasName;
-}
+      this.id, 
+      this.type, 
+      this.avatarUrl, 
+      this.name, 
+      this.aliasName, 
+      this.initPath,});
 
   AuthModel.fromJson(dynamic json) {
-    _id = json['id'];
-    _type = json['type'];
-    _avatarUrl = json['avatar_url'];
-    _name = json['name'];
-    _aliasName = json['alias_name'];
+    id = json['id'];
+    type = json['type'];
+    avatarUrl = json['avatar_url'];
+    name = json['name'];
+    aliasName = json['alias_name'];
+    initPath = json['init_path'];
   }
-  String? _id;
-  String? _type;
-  String? _avatarUrl;
-  String? _name;
-  String? _aliasName;
-AuthModel copyWith({  String? id,
-  String? type,
-  String? avatarUrl,
-  String? name,
-  String? aliasName,
-}) => AuthModel(  id: id ?? _id,
-  type: type ?? _type,
-  avatarUrl: avatarUrl ?? _avatarUrl,
-  name: name ?? _name,
-  aliasName: aliasName ?? _aliasName,
-);
-  String? get id => _id;
-  String? get type => _type;
-  String? get avatarUrl => _avatarUrl;
-  String? get name => _name;
-  String? get aliasName => _aliasName;
+  String? id;
+  String? type;
+  String? avatarUrl;
+  String? name;
+  String? aliasName;
+  String? initPath;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['id'] = _id;
-    map['type'] = _type;
-    map['avatar_url'] = _avatarUrl;
-    map['name'] = _name;
-    map['alias_name'] = _aliasName;
+    map['id'] = id;
+    map['type'] = type;
+    map['avatar_url'] = avatarUrl;
+    map['name'] = name;
+    map['alias_name'] = aliasName;
+    map['init_path'] = initPath;
     return map;
   }
 

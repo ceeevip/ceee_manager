@@ -6,6 +6,7 @@ import 'package:ceee_manager/util/theme_util.dart';
 import 'package:ceee_manager/util/widge_util.dart';
 import 'package:flutter/material.dart';
 
+/// 远程根目录下的所有目录
 class SourceAlbumRemoteManager extends StatefulWidget {
   SourceModel sourceModel;
   List<AlbumModel> albums;
@@ -108,6 +109,7 @@ class _SourceAlbumRemoteManagerState extends State<SourceAlbumRemoteManager> {
                 return ListView.builder(
                     itemCount: currentPathFiles.length,
                     itemBuilder: (context, index) => ListTile(
+                      // tileColor: widget.strAlbums.contains(currentPathFiles[index].path)?Colors.amber:null,
                           leading: Icon(Icons.folder,color: widget.strAlbums.contains(currentPathFiles[index].path)?Colors.amber:null,),
                           title: Text(pathname(currentPathFiles[index].path!)),
                           trailing: Switch(

@@ -1,3 +1,4 @@
+import 'package:ceee_manager/page/manager/auth_add_page.dart';
 import 'package:flutter/material.dart';
 
 import '../../model/AuthModel.dart';
@@ -23,7 +24,14 @@ class _ManagerAuthPageState extends State<ManagerAuthPage> {
                   title: Text("资源管理"),
                   actions: [
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                          return AuthAddPage(() {
+                            setState(() {
+                            });
+                          });
+                        }));
+                      },
                       child: Icon(Icons.add),
                     ),
                     SizedBox(

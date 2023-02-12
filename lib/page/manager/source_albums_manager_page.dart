@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 
 import '../../util/widge_util.dart';
 
+/// 分享页面
 class SourceAlbumsManagerPage extends StatefulWidget {
   SourceModel sourceModel;
   String shareLink = "---";
