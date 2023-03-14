@@ -1,23 +1,26 @@
 # ceee_manager
 
-# 国际化
-https://www.jianshu.com/p/d35db955e331
-
-# 创建创建支持其他平台
-
+# App Pack Command
 ```
-flutter create --platforms=windows,macos,linux .
+flutter buid ios
+flutter build android
 ```
 
-# Feature
-[ ] 放开 album image url
-[ ] auth 管理，这个token 或者用户名密码需要更新
-[ ] 对alist 和 local 和百度盘进行可修改。
+# Support Feature
+[X] User Login
+[X] Source Manager
+[X] Albums Manager
+[X] Support Local Disk Source
+[X] Support Alist tools Source   (https://alist.nn.ci/)[https://alist.nn.ci/]
+[ ] Search with keywords
 
-# web 两种打包方式
+# web Pack Command(two ways)
 ```
-# 如果单独部署，那么直接使用 
+# Single to Deploy to Nginx or Tomcat 
 flutter build web --release
-# 如果需要在CeeeSource工程中集成那么执行
-flutter build web --release   --base-href "/admin/"
+
+# For Project CeeeSource Integration 
+# --base-href is the prefix of web request
+flutter build web --release  --base-href "/admin/"
 ```
+
