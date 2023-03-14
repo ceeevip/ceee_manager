@@ -3,7 +3,7 @@
 # App Pack Command
 ```
 flutter buid ios
-flutter build android
+flutter build apk
 ```
 
 # Support Feature
