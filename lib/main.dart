@@ -81,7 +81,6 @@ class _MainAppWidgetState extends State<MainAppWidget> {
           icon: Icon(Icons.account_circle_outlined),
           activeIcon: Icon(Icons.account_circle)),
     ];
-
     try {
       _pages = [
         FutureBuilder(
