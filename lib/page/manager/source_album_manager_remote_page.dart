@@ -115,7 +115,6 @@ class _SourceAlbumRemoteManagerState extends State<SourceAlbumRemoteManager> {
                           trailing: Switch(
                             value: widget.strAlbums.contains(currentPathFiles[index].path),
                             onChanged: (value) {
-                              print("${value}");
                               var thisFile = currentPathFiles[index];
                               if (value) {
                                 //add
@@ -124,8 +123,9 @@ class _SourceAlbumRemoteManagerState extends State<SourceAlbumRemoteManager> {
                                   fsId: thisFile.fsId,
                                   sourceId: widget.sourceModel.id,
                                   name: pathname(thisFile.path!),
+                                  enableSearch: 1
                                 );
-                                HttpDio.create_album(albumModel).then((value) => {
+                                HttpDio.create_or_update_album(albumModel).then((value) => {
                                       setState(() {
                                         widget.strAlbums.add(thisFile.path!);
                                       })

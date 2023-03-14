@@ -1,5 +1,6 @@
 
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 import 'package:fluttericon/fontelico_icons.dart';
@@ -49,6 +50,24 @@ class WidgetUtil{
             ],
           )),
     );
+  }
+
+  static showMyDialog(BuildContext context, Widget widget) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return widget;
+        });
+  }
+
+  static showCupertinoModal(BuildContext context, Widget widget){
+    showCupertinoModalPopup(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return widget;
+        });
   }
 
 }

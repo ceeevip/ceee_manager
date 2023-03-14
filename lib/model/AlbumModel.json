@@ -1,8 +1,10 @@
 {
+  "id": "string",
   "path": "string",
   "fs_id": "string",
   "source_id": "string",
   "name": "string",
-  "album_url": "string",
-  "id": "string"
+  "cover": "string",
+  "enable_search": 1,
+  "memo": "string"
 }

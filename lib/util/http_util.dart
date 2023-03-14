@@ -11,17 +11,17 @@ import '../model/UserInfo.dart';
 class HttpDio {
   static Dio dio = Dio();
 
-  static initOptions(String base_url, Map<String, dynamic> headers) {
-    dio.options.baseUrl = base_url;
+  static initOptions(String baseUrl, Map<String, dynamic> headers) {
+    dio.options.baseUrl = baseUrl;
     dio.options.headers.addAll(headers);
   }
 
   static Future<LoginResponseEntity> login_token(
-      String base_url, String email, String pwd) async {
+      String baseUrl, String email, String pwd) async {
     try {
       var formData = FormData.fromMap({"username": email, "password": pwd});
       var response = await dio.post(
-        "${base_url}/auth/token",
+        "${baseUrl}/auth/token",
         options: Options(receiveDataWhenStatusError: true),
         data: formData,
       );
@@ -143,9 +143,9 @@ class HttpDio {
     }
   }
 
-  static Future<SourceModel> create_album(AlbumModel albums) async {
+  static Future<SourceModel> create_or_update_album(AlbumModel albums) async {
     try {
-      var resp = await dio.post("/auth/create_album", data: albums.toJson());
+      var resp = await dio.post("/auth/create_or_update_album", data: albums.toJson());
       return SourceModel.fromJson(resp.data);
     } on DioError catch (e) {
       print(e);

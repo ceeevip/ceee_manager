@@ -21,8 +21,7 @@ class SourceAlbumsManagerPage extends StatefulWidget {
   }
 
   @override
-  State<SourceAlbumsManagerPage> createState() =>
-      _SourceAlbumsManagerPageState();
+  State<SourceAlbumsManagerPage> createState() => _SourceAlbumsManagerPageState();
 }
 
 class _SourceAlbumsManagerPageState extends State<SourceAlbumsManagerPage> {
@@ -47,16 +46,14 @@ class _SourceAlbumsManagerPageState extends State<SourceAlbumsManagerPage> {
                   context: context,
                   builder: (context) => CupertinoAlertDialog(
                         title: Text("分享"),
-                        content: SelectableText.rich(TextSpan(
-                            text: widget.shareLink,
-                            style: TextStyle(color: Colors.red))),
+                        content: SelectableText.rich(
+                            TextSpan(text: widget.shareLink, style: TextStyle(color: Colors.red))),
                         actions: [
                           CupertinoDialogAction(
                               child: Text("复制"),
                               onPressed: () {
                                 //TODO copy to mem
-                                Clipboard.setData(
-                                    ClipboardData(text: widget.shareLink));
+                                Clipboard.setData(ClipboardData(text: widget.shareLink));
                                 WidgetUtil.showToast(context, "复制成功");
                                 Navigator.pop(context, "copy");
                               }),
@@ -90,36 +87,69 @@ class _SourceAlbumsManagerPageState extends State<SourceAlbumsManagerPage> {
             if (snapshot.hasError) {
               return WidgetUtil.getFutureBuilderErrorPage(context, setState);
             }
-            if (snapshot.connectionState == ConnectionState.done &&
-                !snapshot.hasError) {
+            if (snapshot.connectionState == ConnectionState.done && !snapshot.hasError) {
               albums = snapshot.data ?? [];
 
               return ListView.builder(
                   itemCount: albums.length,
                   itemBuilder: (context, index) => ListTile(
                         leading: const Icon(
-                          Icons.folder,
-                          color: Colors.amber,
+                          Icons.check_circle_rounded,
+                          color: Colors.blueAccent,
                         ),
                         title: Text(albums[index].name!),
-                        trailing: InkWell(
-                          child: const Icon(Icons.delete_forever_sharp),
-                          onTap: () {
-                            HttpDio.delete_album(albums[index])
-                                .then((value) => {
-                                      setState(() {
-                                        WidgetUtil.showToast(context, "已经删除");
-                                      })
-                                    })
-                                .catchError((error, stackTrace) {
-                              WidgetUtil.showToast(context, "删除失败");
-                            });
-                          },
-                        ),
+                        trailing: Icon(Icons.settings_sharp),
                         onTap: () {
-                          // setState(() {
-                          //   print(albums[index]);
-                          // });
+                          var album = albums[index];
+                          WidgetUtil.showMyDialog(
+                              context,
+                              SimpleDialog(
+                                title: Text("${album.name}"),
+                                children: [
+                                  ListTile(
+                                    title: Text("可否搜索"),
+                                    trailing: CupertinoSwitch(
+                                        value: album.enableSearch == 0,
+                                        onChanged: (swich) {
+                                          if (swich) {
+                                            album.enableSearch = 0;
+                                          } else {
+                                            album.enableSearch = 1;
+                                          }
+                                          Navigator.maybePop(context);
+                                          HttpDio.create_or_update_album(album)
+                                              .then((value) => {
+                                                    setState(() {
+                                                      WidgetUtil.showToast(context, "修改成功");
+                                                    })
+                                                  })
+                                              .onError((error, stackTrace) =>
+                                                  {WidgetUtil.showToast(context, "添加失败")});
+                                        }),
+                                  ),
+                                  Divider(
+                                    height: 5,
+                                  ),
+                                  ListTile(
+                                      title: ElevatedButton(
+                                    child: Text("删除"),
+                                    style: ButtonStyle(
+                                        backgroundColor: MaterialStateProperty.all(Colors.red)),
+                                    onPressed: () {
+                                      Navigator.maybePop(context);
+                                      HttpDio.delete_album(albums[index])
+                                          .then((value) => {
+                                                setState(() {
+                                                  WidgetUtil.showToast(context, "已经删除");
+                                                })
+                                              })
+                                          .catchError((error, stackTrace) {
+                                        WidgetUtil.showToast(context, "删除失败");
+                                      });
+                                    },
+                                  ))
+                                ],
+                              ));
                         },
                       ));
             } else {

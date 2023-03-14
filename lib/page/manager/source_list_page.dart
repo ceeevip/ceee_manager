@@ -79,7 +79,7 @@ class _SourceTileState extends State<SourceTile> {
   Widget build(BuildContext context) {
     return ListTile(
       leading: Switch(
-        activeColor: Colors.redAccent,
+        activeColor: Colors.blueAccent,
         value: widget.sm.status == 0,
         onChanged: (value) {
           print("${widget.sm.name} - ${value}");
@@ -87,8 +87,8 @@ class _SourceTileState extends State<SourceTile> {
           HttpDio.update_source(widget.sm).then((value) => {setState(() {})});
         },
       ),
-      title: Text(widget.sm.name ?? "无"),
-      trailing:  const Icon(Icons.settings,color: Colors.redAccent,),
+      title: Text(widget.sm.name ?? "无",style: TextStyle(fontWeight: FontWeight.bold),),
+      trailing:  const Icon(Icons.settings,color: Colors.blueAccent,),
       onTap: () => WidgetUtil.pushNavigator(context, SourceAlbumsManagerPage(widget.sm)),
       onLongPress: () {
         //
