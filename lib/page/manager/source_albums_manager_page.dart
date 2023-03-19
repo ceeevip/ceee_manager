@@ -38,6 +38,12 @@ class _SourceAlbumsManagerPageState extends State<SourceAlbumsManagerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_left),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
         title: Text(widget.sourceModel.name!),
         actions: [
           InkWell(

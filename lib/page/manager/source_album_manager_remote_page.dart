@@ -13,18 +13,20 @@ class SourceAlbumRemoteManager extends StatefulWidget {
 
   late List<String> strAlbums = [];
 
-  SourceAlbumRemoteManager(this.sourceModel, this.albums, {Key? key}) : super(key: key) {
+  SourceAlbumRemoteManager(this.sourceModel, this.albums, {Key? key})
+      : super(key: key) {
     for (var value in albums) {
       strAlbums.add(value.path!);
     }
   }
 
   @override
-  State<SourceAlbumRemoteManager> createState() => _SourceAlbumRemoteManagerState();
+  State<SourceAlbumRemoteManager> createState() =>
+      _SourceAlbumRemoteManagerState();
 }
 
 class _SourceAlbumRemoteManagerState extends State<SourceAlbumRemoteManager> {
-  List<String> currentPaths = ["/"];
+  List<String> currentPaths = ["文件"];
 
   List<DirectoryModel> currentPathFiles = [];
 
@@ -37,7 +39,7 @@ class _SourceAlbumRemoteManagerState extends State<SourceAlbumRemoteManager> {
   String pathname(String path) {
     int index = path.lastIndexOf("/");
     if (index == -1 || path.length == 1) {
-      return "/";
+      return "文件";
     }
     return path.substring(index + 1);
   }
@@ -46,102 +48,104 @@ class _SourceAlbumRemoteManagerState extends State<SourceAlbumRemoteManager> {
     List<Widget> textButtons = [];
 
     for (var p in currentPaths) {
-      textButtons.add(TextButton(
-          style: ButtonStyle(
-              padding: ButtonStyleButton.allOrNull<EdgeInsetsGeometry>(
-                  EdgeInsets.only(left: 5, right: 5))),
-          onPressed: () {
+      textButtons.add(InkWell(
+          onTap: () {
             //TODO click to geven path
             setState(() {
-              currentPaths.removeRange(currentPaths.indexOf(p) + 1, currentPaths.length);
+              currentPaths.removeRange(
+                  currentPaths.indexOf(p) + 1, currentPaths.length);
             });
           },
           child: Text(pathname(p))));
-      if (p != "/") {
+      if (p != "文件") {
         textButtons.add(Container(
             // padding: EdgeInsets.only(top: 18.5),
             child: Text(
-          "/",
-          style: TextStyle(color: ThemeUtil.isDarkMode(context) ? Colors.white : Colors.black12),
+          " > ",
         )));
       }
     }
     textButtons.removeLast();
-    textButtons.add(Spacer());
-    if (textButtons.length <= 5) {
-      return textButtons;
-    } else {
-      var rs = textButtons.sublist(textButtons.length - 5);
-      rs.insert(
-          0,
-          Text(
-            "..",
-            style: TextStyle(color: ThemeUtil.isDarkMode(context) ? Colors.white : Colors.black12),
-          ));
-      return rs;
-    }
+    return textButtons;
+
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.home),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          title: Row(
-            children: getPathWidget(),
-          ),
-        ),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_left),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            title: Expanded(
+                child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              reverse: true,
+              child: Row(children: getPathWidget()),
+            ))),
         body: FutureBuilder(
-            future: HttpDio.auth_list_dirs(currentPaths.last, widget.sourceModel.authId!),
+            future: HttpDio.auth_list_dirs(
+                currentPaths.last, widget.sourceModel.authId!),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return WidgetUtil.getFutureBuilderErrorPage(context, setState);
               }
-              if (snapshot.connectionState == ConnectionState.done && !snapshot.hasError) {
+              if (snapshot.connectionState == ConnectionState.done &&
+                  !snapshot.hasError) {
                 currentPathFiles.clear();
                 currentPathFiles.addAll(snapshot.data ?? []);
 
                 return ListView.builder(
                     itemCount: currentPathFiles.length,
                     itemBuilder: (context, index) => ListTile(
-                      // tileColor: widget.strAlbums.contains(currentPathFiles[index].path)?Colors.amber:null,
-                          leading: Icon(Icons.folder,color: widget.strAlbums.contains(currentPathFiles[index].path)?Colors.amber:null,),
+                          // tileColor: widget.strAlbums.contains(currentPathFiles[index].path)?Colors.amber:null,
+                          leading: Icon(
+                            Icons.folder,
+                            color: widget.strAlbums
+                                    .contains(currentPathFiles[index].path)
+                                ? Colors.amber
+                                : null,
+                          ),
                           title: Text(pathname(currentPathFiles[index].path!)),
                           trailing: Switch(
-                            value: widget.strAlbums.contains(currentPathFiles[index].path),
+                            value: widget.strAlbums
+                                .contains(currentPathFiles[index].path),
                             onChanged: (value) {
                               var thisFile = currentPathFiles[index];
                               if (value) {
                                 //add
                                 AlbumModel albumModel = AlbumModel(
-                                  path: thisFile.path,
-                                  fsId: thisFile.fsId,
-                                  sourceId: widget.sourceModel.id,
-                                  name: pathname(thisFile.path!),
-                                  enableSearch: 1
-                                );
-                                HttpDio.create_or_update_album(albumModel).then((value) => {
-                                      setState(() {
-                                        widget.strAlbums.add(thisFile.path!);
-                                      })
-                                    }).onError((error, stackTrace) => {
-                                  WidgetUtil.showToast(context, "添加失败")
-                                });
-                              } else {
-                                //delete
-                                HttpDio.delete_album(AlbumModel(path: thisFile.path))
+                                    path: thisFile.path,
+                                    fsId: thisFile.fsId,
+                                    sourceId: widget.sourceModel.id,
+                                    name: pathname(thisFile.path!),
+                                    enableSearch: 1);
+                                HttpDio.create_or_update_album(albumModel)
                                     .then((value) => {
                                           setState(() {
-                                            widget.strAlbums.remove(thisFile.path!);
+                                            widget.strAlbums
+                                                .add(thisFile.path!);
                                           })
-                                        }).onError((error, stackTrace) => {
+                                        })
+                                    .onError((error, stackTrace) => {
+                                          WidgetUtil.showToast(context, "添加失败")
+                                        });
+                              } else {
+                                //delete
+                                HttpDio.delete_album(
+                                        AlbumModel(path: thisFile.path))
+                                    .then((value) => {
+                                          setState(() {
+                                            widget.strAlbums
+                                                .remove(thisFile.path!);
+                                          })
+                                        })
+                                    .onError((error, stackTrace) => {
                                           WidgetUtil.showToast(context, "删除失败")
-                                });
+                                        });
                               }
                             },
                           ),
