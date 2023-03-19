@@ -26,7 +26,7 @@ class SourceAlbumRemoteManager extends StatefulWidget {
 }
 
 class _SourceAlbumRemoteManagerState extends State<SourceAlbumRemoteManager> {
-  List<String> currentPaths = ["文件"];
+  List<String> currentPaths = ["/"];
 
   List<DirectoryModel> currentPathFiles = [];
 
@@ -57,7 +57,7 @@ class _SourceAlbumRemoteManagerState extends State<SourceAlbumRemoteManager> {
             });
           },
           child: Text(pathname(p))));
-      if (p != "文件") {
+      if (p != "/") {
         textButtons.add(Container(
             // padding: EdgeInsets.only(top: 18.5),
             child: Text(
@@ -67,98 +67,111 @@ class _SourceAlbumRemoteManagerState extends State<SourceAlbumRemoteManager> {
     }
     textButtons.removeLast();
     return textButtons;
-
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-            leading: IconButton(
-              icon: Icon(Icons.arrow_left),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            title: Expanded(
-                child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              reverse: true,
-              child: Row(children: getPathWidget()),
-            ))),
-        body: FutureBuilder(
-            future: HttpDio.auth_list_dirs(
-                currentPaths.last, widget.sourceModel.authId!),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return WidgetUtil.getFutureBuilderErrorPage(context, setState);
-              }
-              if (snapshot.connectionState == ConnectionState.done &&
-                  !snapshot.hasError) {
-                currentPathFiles.clear();
-                currentPathFiles.addAll(snapshot.data ?? []);
+    return WillPopScope(
+        child: Scaffold(
+            appBar: AppBar(
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_left),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                title: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  reverse: true,
+                  child: Row(children: getPathWidget()),
+                )),
+            body: FutureBuilder(
+                future: HttpDio.auth_list_dirs(
+                    currentPaths.last, widget.sourceModel.authId!),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return WidgetUtil.getFutureBuilderErrorPage(
+                        context, setState);
+                  }
+                  if (snapshot.connectionState == ConnectionState.done &&
+                      !snapshot.hasError) {
+                    currentPathFiles.clear();
+                    currentPathFiles.addAll(snapshot.data ?? []);
 
-                return ListView.builder(
-                    itemCount: currentPathFiles.length,
-                    itemBuilder: (context, index) => ListTile(
-                          // tileColor: widget.strAlbums.contains(currentPathFiles[index].path)?Colors.amber:null,
-                          leading: Icon(
-                            Icons.folder,
-                            color: widget.strAlbums
-                                    .contains(currentPathFiles[index].path)
-                                ? Colors.amber
-                                : null,
-                          ),
-                          title: Text(pathname(currentPathFiles[index].path!)),
-                          trailing: Switch(
-                            value: widget.strAlbums
-                                .contains(currentPathFiles[index].path),
-                            onChanged: (value) {
-                              var thisFile = currentPathFiles[index];
-                              if (value) {
-                                //add
-                                AlbumModel albumModel = AlbumModel(
-                                    path: thisFile.path,
-                                    fsId: thisFile.fsId,
-                                    sourceId: widget.sourceModel.id,
-                                    name: pathname(thisFile.path!),
-                                    enableSearch: 1);
-                                HttpDio.create_or_update_album(albumModel)
-                                    .then((value) => {
-                                          setState(() {
-                                            widget.strAlbums
-                                                .add(thisFile.path!);
-                                          })
-                                        })
-                                    .onError((error, stackTrace) => {
-                                          WidgetUtil.showToast(context, "添加失败")
-                                        });
-                              } else {
-                                //delete
-                                HttpDio.delete_album(
-                                        AlbumModel(path: thisFile.path))
-                                    .then((value) => {
-                                          setState(() {
-                                            widget.strAlbums
-                                                .remove(thisFile.path!);
-                                          })
-                                        })
-                                    .onError((error, stackTrace) => {
-                                          WidgetUtil.showToast(context, "删除失败")
-                                        });
-                              }
-                            },
-                          ),
-                          onTap: () {
-                            setState(() {
-                              currentPaths.add(currentPathFiles[index].path!);
-                            });
-                          },
-                        ));
-              } else {
-                return const Center(child: CircularProgressIndicator());
-              }
-            }));
+                    return ListView.builder(
+                        itemCount: currentPathFiles.length,
+                        itemBuilder: (context, index) => ListTile(
+                              // tileColor: widget.strAlbums.contains(currentPathFiles[index].path)?Colors.amber:null,
+                              leading: Icon(
+                                Icons.folder,
+                                color: widget.strAlbums
+                                        .contains(currentPathFiles[index].path)
+                                    ? Colors.amber
+                                    : null,
+                              ),
+                              title:
+                                  Text(pathname(currentPathFiles[index].path!)),
+                              trailing: Switch(
+                                value: widget.strAlbums
+                                    .contains(currentPathFiles[index].path),
+                                onChanged: (value) {
+                                  var thisFile = currentPathFiles[index];
+                                  if (value) {
+                                    //add
+                                    AlbumModel albumModel = AlbumModel(
+                                        path: thisFile.path,
+                                        fsId: thisFile.fsId,
+                                        sourceId: widget.sourceModel.id,
+                                        name: pathname(thisFile.path!),
+                                        enableSearch: 1);
+                                    HttpDio.create_or_update_album(albumModel)
+                                        .then((value) => {
+                                              setState(() {
+                                                widget.strAlbums
+                                                    .add(thisFile.path!);
+                                              })
+                                            })
+                                        .onError((error, stackTrace) => {
+                                              WidgetUtil.showToast(
+                                                  context, "添加失败")
+                                            });
+                                  } else {
+                                    //delete
+                                    HttpDio.delete_album(
+                                            AlbumModel(path: thisFile.path))
+                                        .then((value) => {
+                                              setState(() {
+                                                widget.strAlbums
+                                                    .remove(thisFile.path!);
+                                              })
+                                            })
+                                        .onError((error, stackTrace) => {
+                                              WidgetUtil.showToast(
+                                                  context, "删除失败")
+                                            });
+                                  }
+                                },
+                              ),
+                              onTap: () {
+                                setState(() {
+                                  currentPaths
+                                      .add(currentPathFiles[index].path!);
+                                });
+                              },
+                            ));
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                })),
+        onWillPop: () async {
+          if (currentPaths.length > 1) {
+            currentPaths.removeLast();
+            setState(() {});
+            return false;
+          } else {
+            return true;
+          }
+        });
   }
 }
 
