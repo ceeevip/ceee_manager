@@ -17,7 +17,7 @@ class SourceAlbumsManagerPage extends StatefulWidget {
 
   SourceAlbumsManagerPage(this.sourceModel, {Key? key}) : super(key: key) {
     shareLink =
-        "${SpUtil.getString(StoreKey.BASE_URL.name)}/api/source/${sourceModel.id!}?pwd=${sourceModel.password}";
+        "分享源名称: ${sourceModel.name} \n复制链接: ${SpUtil.getString(StoreKey.BASE_URL.name)}/api/source/${sourceModel.id!}?pwd=${sourceModel.password}";
   }
 
   @override
