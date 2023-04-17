@@ -1,5 +1,6 @@
 import 'package:ceee_manager/model/AuthModel.dart';
 import 'package:ceee_manager/model/SourceModel.dart';
+import 'package:ceee_manager/util/bing_header_search.dart';
 import 'package:ceee_manager/util/http_util.dart';
 import 'package:ceee_manager/util/widge_util.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,8 @@ enum FileType { audio, epub }
 class SourceAddPage extends StatefulWidget {
   void Function() callback;
 
-  SourceAddPage(this.callback, {Key? key}) : super(key: key);
+  SourceModel? sourceModel;
+  SourceAddPage(this.callback, {Key? key,this. sourceModel}) : super(key: key);
 
   @override
   State<SourceAddPage> createState() => _SourceAddPageState();
@@ -20,7 +22,7 @@ class _SourceAddPageState extends State<SourceAddPage> {
   final TextEditingController _coverController = TextEditingController();
   final GlobalKey _formKey = GlobalKey<FormState>();
 
-  late AuthModel _authModel;
+  AuthModel? _authModel;
 
   late String _apiVersion = "v1";
 
@@ -28,12 +30,30 @@ class _SourceAddPageState extends State<SourceAddPage> {
 
   String? coverUrl;
 
+  late FileType fileType = FileType.audio;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    if(widget.sourceModel!=null) {
+      _unameController.text = widget.sourceModel!.name??"";
+      _pwdController.text = widget.sourceModel!.password??"";
+      _coverController.text = widget.sourceModel!.cover??"";
+      _apiVersion = widget.sourceModel!.apiVersion??_apiVersion;
+      fileType = widget.sourceModel!.fileType=='epub'?FileType.epub:FileType.audio;
+
+    }
     if (mounted) {
       HttpDio.auths_list().then((value) {
+        if(widget.sourceModel!=null) {
+          value?.forEach((element) {
+            if (element.id == widget.sourceModel?.authId) {
+                  _authModel = element;
+            }
+          });
+        }
+
         setState(() {
           auths.addAll(value ?? []);
         });
@@ -49,7 +69,7 @@ class _SourceAddPageState extends State<SourceAddPage> {
     return items;
   }
 
-  FileType fileType = FileType.audio;
+
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +95,7 @@ class _SourceAddPageState extends State<SourceAddPage> {
               },
             ),
             DropdownButtonFormField(
+              value: _authModel,
               decoration: const InputDecoration(labelText: "数据源", icon: Icon(Icons.source)),
               items: getAuthsList(),
               onChanged: (value) {
@@ -85,6 +106,7 @@ class _SourceAddPageState extends State<SourceAddPage> {
               },
             ),
             DropdownButtonFormField(
+              value: _apiVersion,
                 decoration: const InputDecoration(
                     labelText: "API 版本", icon: Icon(Icons.domain_verification_outlined)),
                 items: const [
@@ -114,6 +136,13 @@ class _SourceAddPageState extends State<SourceAddPage> {
             ),
             TextFormField(
               controller: _coverController,
+              onTap: (){
+                WidgetUtil.pushNavigator(context, ImageSearchPage(_unameController.text, (url){
+                  setState(() {
+                    _coverController.text = url;
+                  });
+                }));
+              },
               decoration:
                   const InputDecoration(labelText: "封面 URL", hintText: "封面 URL", icon: Icon(Icons.image)),
               onChanged: (value) {
@@ -121,13 +150,9 @@ class _SourceAddPageState extends State<SourceAddPage> {
                   coverUrl = value;
                 });
               },
-              // obscureText: true,
-              //校验密码
-              // validator: (v) {
-              //   return v!.trim().length <= 4 ? null : "密码不能大于4位";
-              // },
             ),
             DropdownButtonFormField(
+              value: fileType,
                 decoration: const InputDecoration(
                   labelText: "类型",
                   hintText: "类型",
@@ -163,8 +188,8 @@ class _SourceAddPageState extends State<SourceAddPage> {
                         if ((_formKey.currentState as FormState).validate()) {
                           var source = SourceModel(
                               name: _unameController.text,
-                              authId: _authModel.id,
-                              sourceType: _authModel.type,
+                              authId: _authModel!.id,
+                              sourceType: _authModel!.type,
                               apiVersion: _apiVersion,
                               password: _pwdController.text,
                               cover: _coverController.text,

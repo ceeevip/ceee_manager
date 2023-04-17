@@ -44,6 +44,7 @@ dependencies:
   intl: ^0.17.0
   intl_generator: ^0.3.0
   fluttericon: ^2.0.0
+  html: ^0.15.2
 
 
 dev_dependencies:

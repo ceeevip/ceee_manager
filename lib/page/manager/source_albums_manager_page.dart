@@ -1,6 +1,7 @@
 import 'package:ceee_manager/core/Consts.dart';
 import 'package:ceee_manager/model/AlbumModel.dart';
 import 'package:ceee_manager/model/SourceModel.dart';
+import 'package:ceee_manager/page/manager/source_add_page.dart';
 import 'package:ceee_manager/page/manager/source_album_manager_remote_page.dart';
 import 'package:ceee_manager/util/data_store.dart';
 import 'package:ceee_manager/util/http_util.dart';
@@ -34,6 +35,10 @@ class _SourceAlbumsManagerPageState extends State<SourceAlbumsManagerPage> {
     super.initState();
   }
 
+  void callback() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,6 +51,9 @@ class _SourceAlbumsManagerPageState extends State<SourceAlbumsManagerPage> {
         ),
         title: Text(widget.sourceModel.name!),
         actions: [
+          IconButton(onPressed: (){
+            WidgetUtil.pushNavigator(context, SourceAddPage(callback,sourceModel: widget.sourceModel,));
+          }, icon: Icon(Icons.info)),
           InkWell(
             onTap: () {
               showDialog(
