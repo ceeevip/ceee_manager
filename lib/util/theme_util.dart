@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ThemeUtil {
@@ -60,6 +61,11 @@ class ThemeUtil {
         textSelectionTheme: TextSelectionThemeData(
           selectionColor: Colours.app_main.withAlpha(70),
           selectionHandleColor: Colours.app_main,
+        ),
+        cupertinoOverrideTheme: NoDefaultCupertinoThemeData(
+            textTheme: CupertinoTextThemeData(
+                textStyle: isDarkMode ? TextStyles.textDark : TextStyles.text,
+            primaryColor: isDarkMode?Colours.dark_text: Colours.text),
         ));
   }
 }

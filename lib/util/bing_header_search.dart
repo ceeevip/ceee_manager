@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:ceee_manager/util/theme_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
@@ -39,6 +40,9 @@ class _ImageSearchPageState extends State<ImageSearchPage> {
       // 构造请求URL
       String url = 'https://www.bing.com/images/search?q=$keyword&count=$num_images';
 
+      setState(() {
+        _imageUrls.clear();
+      });
       // 发送请求，获取响应结果
       Response response = await Dio().get(url);
       Document document = parse(response.data);
@@ -52,7 +56,7 @@ class _ImageSearchPageState extends State<ImageSearchPage> {
       });
 
       // 打印图片URL列表
-      _imageUrls.clear();
+
       for (String u in image_urls) {
         _imageUrls.add(u);
       }
@@ -68,15 +72,16 @@ class _ImageSearchPageState extends State<ImageSearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: TextField(
+        title: CupertinoSearchTextField(
           controller: _searchController,
+          style: ThemeUtil.isDarkMode(context)?TextStyles.textDark:TextStyles.text,
           // decoration: InputDecoration(
           //   hintText: 'Search images',
           // ),
           onSubmitted: (query) => _searchImages(query),
         ),
       ),
-      body: GridView.builder(
+      body: _imageUrls.length==0?Center(child:CircularProgressIndicator()):GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 4,
           crossAxisSpacing: 4.0,
